@@ -1,0 +1,16 @@
+<component name="libraryTable">
+  <library name="Gradle: androidx.lifecycle:lifecycle-service:2.2.0@aar">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../AndroidGradle/caches/transforms-3/a8514d5e042125837532d1d4ca2482d8/transformed/lifecycle-service-2.2.0/res" />
+      <root url="file://$PROJECT_DIR$/../AndroidGradle/caches/transforms-3/58735c14b8ad9648936d8043a6b85ef6/transformed/lifecycle-service-2.2.0/res" />
+      <root url="file://$PROJECT_DIR$/../AndroidGradle/caches/transforms-3/f8ac5c1028a74eb345b1dc52766b52da/transformed/lifecycle-service-2.2.0/res" />
+      <root url="file://$PROJECT_DIR$/../AndroidGradle/caches/transforms-3/e32a09dd7c0407335607f7d7dd0b632c/transformed/lifecycle-service-2.2.0/res" />
+      <root url="file://$PROJECT_DIR$/../AndroidGradle/caches/transforms-3/f8ac5c1028a74eb345b1dc52766b52da/transformed/lifecycle-service-2.2.0/AndroidManifest.xml" />
+      <root url="jar://$PROJECT_DIR$/../AndroidGradle/caches/transforms-3/f8ac5c1028a74eb345b1dc52766b52da/transformed/lifecycle-service-2.2.0/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../AndroidGradle/caches/modules-2/files-2.1/androidx.lifecycle/lifecycle-service/2.2.0/e150534c1cf4462034fe447f30f8c07bcd7d8f22/lifecycle-service-2.2.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
