@@ -2,20 +2,18 @@ package com.example.transoapp.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.transoapp.R
 import com.example.transoapp.databinding.LayoutDataBinding
-import com.example.transoapp.extension.loadImage
 import com.example.transoapp.listener.EventListener
 import com.example.transoapp.pojo.ExampleData
 
-class ExampleAdapter(
+class ZoneAdapter(
     var data: ArrayList<ExampleData.Doc>,
     var mEventListener: EventListener<ExampleData.Doc>
 ) :
-    RecyclerView.Adapter<ExampleAdapter.MyViewHolder>() {
+    RecyclerView.Adapter<ZoneAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -43,7 +41,7 @@ class ExampleAdapter(
             textViewName.text = baseCoinName.toString()
             textViewVolume.text = volume.toString()
             textViewLastPrice.text = lastPrice.toString()
-            textViewPricePercentage.text = priceChangePercent.toString()
+            textViewPricePercentage.text = priceChangePercent.toString() + "%"
         }
 
         root.setOnClickListener {
@@ -69,7 +67,7 @@ class ExampleAdapter(
             holder.itemBinding.apply {
                 item.apply {
                     textViewPrice.text = priceChange.toString()
-                    textViewPricePercentage.text = priceChangePercent.toString()
+                    textViewPricePercentage.text = priceChangePercent.toString() + "%"
                 }
             }
         }
