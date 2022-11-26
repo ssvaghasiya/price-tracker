@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_main_activity"
+    app:startDestination="@id/spot">
+
+    <fragment
+        android:id="@+id/spot"
+        android:name="com.example.transoapp.ui.activity.SpotFragment"
+        android:label="fragment_spot"
+        tools:layout="@layout/fragment_spot" />
+    <fragment
+        android:id="@+id/zone"
+        android:name="com.example.transoapp.ui.activity.ZoneFragment"
+        android:label="fragment_zone"
+        tools:layout="@layout/fragment_zone" />
+</navigation>

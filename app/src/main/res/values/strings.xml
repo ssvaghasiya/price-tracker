@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Transo</string>
+    <string name="internet_validation">Please connect to internet.</string>
+    <string name="something_wrong_validation">something went wrong</string>
+</resources>
