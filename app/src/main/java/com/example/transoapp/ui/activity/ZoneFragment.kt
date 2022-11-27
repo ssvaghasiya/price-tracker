@@ -15,7 +15,7 @@ import com.example.transoapp.listener.EventListener
 import com.example.transoapp.pojo.ApiRequestData
 import com.example.transoapp.pojo.ExampleData
 import com.example.transoapp.pojo.SymbolPriceTickerData
-import com.example.transoapp.ui.adapter.SpotAdapter
+import com.example.transoapp.ui.adapter.ZoneAdapter
 import com.example.transoapp.viewmodels.MainViewModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -30,13 +30,34 @@ class ZoneFragment : Fragment() {
     private var _binding: FragmentZoneBinding? = null
     private val binding get() = _binding!!
     lateinit var mainViewModel: MainViewModel
-    lateinit var exampleAdapter: SpotAdapter
+    lateinit var zoneAdapter: ZoneAdapter
     private var exampleList = ArrayList<ExampleData.Doc>()
     private var webSocketClient: WebSocketClient? = null
     private val symbolsMap: ArrayMap<String, Int> = ArrayMap()
+    private var isStarted = false
+    private var isVisibleToUser = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        isStarted = true
+        if (isVisibleToUser && isStarted) {
+            viewDidAppear()
+        }
+    }
+
+    override fun setMenuVisibility(visible: Boolean) {
+        super.setMenuVisibility(visible)
+        isVisibleToUser = visible
+        if (isStarted && isVisibleToUser) {
+            viewDidAppear()
+        }
+    }
+
+    private fun viewDidAppear() {
+        if (exampleList.isNotEmpty()) {
+            webSocketClient?.close()
+            initWebSocket()
+        }
     }
 
     override fun onCreateView(
@@ -52,8 +73,8 @@ class ZoneFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         mainViewModel =
             ViewModelProvider(requireActivity())[MainViewModel::class.java]
-        setObserver()
         setAdapter()
+        setObserver()
     }
 
     private fun setObserver() {
@@ -63,13 +84,16 @@ class ZoneFragment : Fragment() {
                 Log.e(TAG, "ZoneFragment")
                 exampleList.clear()
                 it.data?.docs?.let { it1 -> exampleList.addAll(it1.take(10)) }
-                exampleAdapter.notifyDataSetChanged()
+                zoneAdapter.notifyDataSetChanged()
                 symbolsMap.clear()
                 exampleList.forEachIndexed { index, doc ->
-                    symbolsMap.set(doc.pairName, index)
+                    symbolsMap[doc.baseCoinCode+"USDT"] = index
                 }
-                webSocketClient?.close()
-                initWebSocket()
+                if (isVisibleToUser) {
+                    Log.e(TAG, "ZoneFragmentVisible")
+                    webSocketClient?.close()
+                    initWebSocket()
+                }
             } else {
                 showToast(getString(R.string.something_wrong_validation))
             }
@@ -77,12 +101,12 @@ class ZoneFragment : Fragment() {
     }
 
     private fun setAdapter() = with(binding) {
-        exampleAdapter = SpotAdapter(exampleList, object : EventListener<ExampleData.Doc> {
+        zoneAdapter = ZoneAdapter(exampleList, object : EventListener<ExampleData.Doc> {
             override fun onItemClick(pos: Int, item: ExampleData.Doc, view: View) {
 
             }
         })
-        recyclerview.adapter = exampleAdapter
+        recyclerview.adapter = zoneAdapter
     }
 
     private fun initWebSocket() {
@@ -101,7 +125,7 @@ class ZoneFragment : Fragment() {
             }
 
             override fun onMessage(message: String?) {
-//                Log.d(TAG, "onMessage msg : $message")
+                Log.d(TAG, "onMessage msg : $message")
                 setUpPriceText(message)
             }
 
@@ -117,13 +141,14 @@ class ZoneFragment : Fragment() {
 
     private fun subscribe() {
         val paramsList =
-            exampleList.take(10).map { it.pairName?.lowercase().toString() + "@ticker" }
+            exampleList.take(10).map { it.baseCoinCode?.lowercase().toString() + "usdt@ticker" }
         val apiRequestData = ApiRequestData().apply {
             method = "SUBSCRIBE"
             params = paramsList
             id = 1
         }
         val request = Gson().toJson(apiRequestData)
+        Log.e(TAG, request)
         webSocketClient?.send(request)
     }
 
@@ -157,7 +182,7 @@ class ZoneFragment : Fragment() {
                     item.priceChangePercent = symbolPriceTickerData?.pricePercentage?.toFloat()
 
                     requireActivity().runOnUiThread {
-                        exampleAdapter.notifyItemChanged(position, "CHANGE_PRICE")
+                        zoneAdapter.notifyItemChanged(position, "CHANGE_PRICE")
                     }
                 }
             }
@@ -168,12 +193,14 @@ class ZoneFragment : Fragment() {
         Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
-    override fun onResume() {
-        super.onResume()
-        Log.e("webs", webSocketClient.toString())
-        if (webSocketClient != null)
-            initWebSocket()
-    }
+//    override fun onResume() {
+//        super.onResume()
+//        Log.e("webs", webSocketClient.toString())
+//        if (webSocketClient != null) {
+//            webSocketClient?.close()
+//            initWebSocket()
+//        }
+//    }
 
     override fun onPause() {
         super.onPause()

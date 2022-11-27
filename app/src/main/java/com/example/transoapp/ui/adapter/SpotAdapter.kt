@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.transoapp.R
-import com.example.transoapp.databinding.LayoutDataBinding
+import com.example.transoapp.databinding.LayoutSpotDataBinding
 import com.example.transoapp.listener.EventListener
 import com.example.transoapp.pojo.ExampleData
 
@@ -17,9 +17,9 @@ class SpotAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val itemBinding = DataBindingUtil.inflate<LayoutDataBinding>(
+        val itemBinding = DataBindingUtil.inflate<LayoutSpotDataBinding>(
             inflater,
-            R.layout.layout_data, parent, false
+            R.layout.layout_spot_data, parent, false
         )
         return MyViewHolder(itemBinding)
     }
@@ -73,7 +73,7 @@ class SpotAdapter(
         }
     }
 
-    inner class MyViewHolder(internal var itemBinding: LayoutDataBinding) :
+    inner class MyViewHolder(internal var itemBinding: LayoutSpotDataBinding) :
         RecyclerView.ViewHolder(itemBinding.root)
 
 }

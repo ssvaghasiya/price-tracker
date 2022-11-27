@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.transoapp.R
-import com.example.transoapp.databinding.LayoutDataBinding
+import com.example.transoapp.databinding.LayoutZoneDataBinding
 import com.example.transoapp.listener.EventListener
 import com.example.transoapp.pojo.ExampleData
 
@@ -17,9 +17,9 @@ class ZoneAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val itemBinding = DataBindingUtil.inflate<LayoutDataBinding>(
+        val itemBinding = DataBindingUtil.inflate<LayoutZoneDataBinding>(
             inflater,
-            R.layout.layout_data, parent, false
+            R.layout.layout_zone_data, parent, false
         )
         return MyViewHolder(itemBinding)
     }
@@ -37,11 +37,9 @@ class ZoneAdapter(
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) = with(holder.itemBinding) {
         val item = getItem(position)
         item.apply {
-            textViewPrice.text = priceChange.toString()
-            textViewName.text = baseCoinName.toString()
-            textViewVolume.text = volume.toString()
-            textViewLastPrice.text = lastPrice.toString()
-            textViewPricePercentage.text = priceChangePercent.toString() + "%"
+            textViewQuoteCoin.text = quoteCoinName.toString()
+            textViewBaseCoin.text = baseCoinName.toString()
+            textViewBasePrice.text = priceChange.toString()
         }
 
         root.setOnClickListener {
@@ -66,14 +64,13 @@ class ZoneAdapter(
         if (payloads.contains("CHANGE_PRICE")) {
             holder.itemBinding.apply {
                 item.apply {
-                    textViewPrice.text = priceChange.toString()
-                    textViewPricePercentage.text = priceChangePercent.toString() + "%"
+                    textViewBasePrice.text = priceChange.toString()
                 }
             }
         }
     }
 
-    inner class MyViewHolder(internal var itemBinding: LayoutDataBinding) :
+    inner class MyViewHolder(internal var itemBinding: LayoutZoneDataBinding) :
         RecyclerView.ViewHolder(itemBinding.root)
 
 }

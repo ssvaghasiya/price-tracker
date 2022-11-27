@@ -35,10 +35,30 @@ class SpotFragment : Fragment() {
     private var exampleList = ArrayList<ExampleData.Doc>()
     private var webSocketClient: WebSocketClient? = null
     private val symbolsMap: ArrayMap<String, Int> = ArrayMap()
+    private var isStarted = false
+    private var isVisibleToUser = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        isStarted = true
+        if (isVisibleToUser && isStarted) {
+            viewDidAppear()
+        }
+    }
 
+    override fun setMenuVisibility(visible: Boolean) {
+        super.setMenuVisibility(visible)
+        isVisibleToUser = visible
+        if (isStarted && isVisibleToUser) {
+            viewDidAppear()
+        }
+    }
+
+    private fun viewDidAppear() {
+        if (exampleList.isNotEmpty()) {
+            webSocketClient?.close()
+            initWebSocket()
+        }
     }
 
     override fun onCreateView(
@@ -68,10 +88,12 @@ class SpotFragment : Fragment() {
                 exampleAdapter.notifyDataSetChanged()
                 symbolsMap.clear()
                 exampleList.forEachIndexed { index, doc ->
-                    symbolsMap.set(doc.pairName, index)
+                    symbolsMap[doc.pairName] = index
                 }
-                webSocketClient?.close()
-                initWebSocket()
+                if (isVisibleToUser) {
+                    webSocketClient?.close()
+                    initWebSocket()
+                }
             } else {
                 showToast(getString(R.string.something_wrong_validation))
             }
@@ -170,12 +192,14 @@ class SpotFragment : Fragment() {
         Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
-    override fun onResume() {
-        super.onResume()
-        Log.e("webs", webSocketClient.toString())
-        if (webSocketClient != null)
-            initWebSocket()
-    }
+//    override fun onResume() {
+//        super.onResume()
+//        Log.e("webs", webSocketClient.toString())
+//        if (webSocketClient != null) {
+//            webSocketClient?.close()
+//            initWebSocket()
+//        }
+//    }
 
     override fun onPause() {
         super.onPause()
